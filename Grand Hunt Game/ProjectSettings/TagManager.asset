@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Barrel
+  - Yellow_Tree
+  - Wheel_Barrow
   layers:
   - Default
   - TransparentFX

@@ -5,17 +5,24 @@ using UnityEngine;
 // To add props
 // Make a public GameObject designated for that prop
 // In Start(), set the GameObject to false
+
+// TODO: Make this script easy to add more props.
 public class PropHunt : MonoBehaviour
 {
     public GameObject Player;   // The player that is being disappeared
     public GameObject Barrel;   // What you turn into
-    /* Can add loads more here */
 
+    /* Can add loads more here */
+    public GameObject Yellow_Tree;
+    public GameObject Wheel_Barrow;
     // Start is called before the first frame update
     void Start()
     {
+        // On game start, only the player is visible.
         Player.SetActive(true);
         Barrel.SetActive(false);
+        Yellow_Tree.SetActive(false);
+        Wheel_Barrow.SetActive(false);
     }
 
     // While player is colliding with object...
@@ -32,7 +39,33 @@ public class PropHunt : MonoBehaviour
                 // Player no longer exists
                 Player.SetActive(false);
                 /* Set any other props to false aswell */
+                Yellow_Tree.SetActive(false);
+                Wheel_Barrow.SetActive(false);
 
+            }
+        }
+        if (coll.gameObject.tag == "Yellow_Tree")
+        {
+            if (Input.GetKeyDown(KeyCode.E) )
+            {
+                // Player wants to become a Yellow_Tree
+                Yellow_Tree.SetActive(true);
+                // Player + Props become inactive
+                Player.SetActive(false);
+                Barrel.SetActive(false);
+                Wheel_Barrow.SetActive(false);
+            }
+        }
+        if (coll.gameObject.tag == "Wheel_Barrow")
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                // Player wants to become a Wheel_Barrow
+                Wheel_Barrow.SetActive(true);
+                // Player + Props become inactive
+                Player.SetActive(false);
+                Barrel.SetActive(false);
+                Yellow_Tree.SetActive(false);
             }
         }
     }
