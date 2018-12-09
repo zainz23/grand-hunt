@@ -4,7 +4,10 @@ using UnityEngine;
 
 // To add props
 // Make a public GameObject designated for that prop
-// In Start(), set the GameObject to false
+// In Start(), set the active of GameObject to false
+// In OnTrigger, set actives in colliding triggers as necessary
+//      False if you want it to disappear
+//      True if you want it to appear
 
 // TODO: Make this script easy to add more props.
 public class PropHunt : MonoBehaviour
@@ -23,6 +26,17 @@ public class PropHunt : MonoBehaviour
         Barrel.SetActive(false);
         Yellow_Tree.SetActive(false);
         Wheel_Barrow.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Player.SetActive(true);
+            Barrel.SetActive(false);
+            Yellow_Tree.SetActive(false);
+            Wheel_Barrow.SetActive(false);
+        }
     }
 
     // While player is colliding with object...
@@ -68,5 +82,6 @@ public class PropHunt : MonoBehaviour
                 Yellow_Tree.SetActive(false);
             }
         }
+
     }
 }
