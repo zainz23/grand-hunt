@@ -48,6 +48,12 @@ public class PropHunt : MonoBehaviour
 
                 mf.GetComponent<Transform>().rotation = coll.transform.rotation;
 
+                if (coll.GetComponent<PropValues>()) {
+                    Debug.Log("TAKE");
+                    Quaternion rotation = this.GetComponentInParent<Transform>().localRotation;
+                    mf.GetComponent<Transform>().localRotation = rotation;
+                }
+
                 // Player wants to become a barrel
                 PROP.SetActive(true);
 

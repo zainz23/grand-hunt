@@ -26,7 +26,7 @@ public class SimpleCharacterControl : MonoBehaviour {
     private readonly float m_backwardRunScale = 0.66f;
 
     private bool m_wasGrounded;
-    private Vector3 m_currentDirection = Vector3.zero;
+    public Vector3 m_currentDirection = Vector3.zero;
 
     private float m_jumpTimeStamp = 0;
     private float m_minJumpInterval = 0.25f;

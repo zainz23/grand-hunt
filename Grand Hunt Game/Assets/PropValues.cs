@@ -6,11 +6,15 @@ public class PropValues : MonoBehaviour
 {
 
     public Quaternion rotation;
+    public GameObject gm;
+    public string key;
     
     // Start is called before the first frame update
     void Start()
     {
-
+        key = GetComponent<MeshFilter>().mesh.name;
+        gm = GameObject.FindGameObjectWithTag("GM");
+        rotation = gm.GetComponent<GM>().database[key];
     }
 
     // Update is called once per frame
