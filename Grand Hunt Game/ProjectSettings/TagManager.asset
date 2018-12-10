@@ -4,9 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Barrel
-  - Yellow_Tree
-  - Wheel_Barrow
+  - PROP
   layers:
   - Default
   - TransparentFX
