@@ -5,7 +5,7 @@ using UnityEngine;
 public class PropValues : MonoBehaviour
 {
 
-    public Quaternion rotation;
+    public Vector3 rotation;
     public GameObject gm;
     public string key;
     

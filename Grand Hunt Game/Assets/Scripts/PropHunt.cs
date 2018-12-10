@@ -14,12 +14,16 @@ public class PropHunt : MonoBehaviour
 {
     public GameObject Player;   // The player that is being disappeared
     public GameObject PROP;   // What you turn into
+    public MeshFilter MESHFILTER; // Set this to PROP <MESHFILTER> Component [the mesh we are changing]
+
+    public GameObject currentCOL;
     // Start is called before the first frame update
     void Start()
     {
         // On game start, only the player is visible.
         Player.SetActive(true);
         PROP.SetActive(false);
+        MESHFILTER = PROP.GetComponent<MeshFilter>();
         
     }
 
@@ -30,11 +34,39 @@ public class PropHunt : MonoBehaviour
             Player.SetActive(true);
             PROP.SetActive(false);
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftBracket))
+        {
+            Debug.Log("DOWN");
+            Vector3 scale = MESHFILTER.transform.localScale;
+            if (scale.x > 1 && scale.x <= 20) {
+                scale.y -= 1;
+                scale.x -= 1;
+                scale.z -= 1;
+                MESHFILTER.transform.localScale = scale;
+            }
+            
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+        {
+            Debug.Log("UP");
+            Vector3 scale = MESHFILTER.transform.localScale;
+            if (scale.x >= 1 && scale.x < 20) {
+                scale.y += 1;
+                scale.x += 1;
+                scale.z += 1;
+                MESHFILTER.transform.localScale = scale;
+            }
+
+        }
     }
 
     // While player is colliding with object...
     void OnTriggerStay(Collider coll)
     {
+        currentCOL = coll.gameObject;
         
         // Tag the object in game
         // Note: Children of Player are left untagged.
@@ -42,16 +74,18 @@ public class PropHunt : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E) )
             {
-                Debug.Log(coll.GetComponent<MeshFilter>().mesh.name);
-                MeshFilter mf = this.GetComponentInChildren<MeshFilter>();
-                mf.mesh = coll.GetComponent<MeshFilter>().mesh;
-
-                mf.GetComponent<Transform>().rotation = coll.transform.rotation;
+                MESHFILTER.mesh = coll.GetComponent<MeshFilter>().mesh;
 
                 if (coll.GetComponent<PropValues>()) {
-                    Debug.Log("TAKE");
-                    Quaternion rotation = this.GetComponentInParent<Transform>().localRotation;
-                    mf.GetComponent<Transform>().localRotation = rotation;
+                    Vector3 rotation = coll.GetComponent<PropValues>().rotation;
+                    MESHFILTER.transform.localEulerAngles = rotation;
+
+                    Vector3 scale = coll.transform.localScale;
+                    scale.y += 3;
+                    scale.x += 3;
+                    scale.z += 3;
+
+                    MESHFILTER.transform.localScale = scale;
                 }
 
                 // Player wants to become a barrel
@@ -59,11 +93,9 @@ public class PropHunt : MonoBehaviour
 
                 // Player no longer exists
                 Player.SetActive(false);
-               
 
             }
-        }
-        
 
+        }
     }
 }

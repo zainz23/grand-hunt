@@ -5,12 +5,13 @@ using UnityEngine;
 public class GM : MonoBehaviour
 {
     //Dictionary<string, PROPClass> database = new Dictionary<string, PROPClass>();
-    public Dictionary<string, Quaternion> database = new Dictionary<string, Quaternion>();
+    public Dictionary<string, Vector3> database = new Dictionary<string, Vector3>();
+    //public Dictionary<string, float> database = new Dictionary<string, float>();
 
     // Start is called before the first frame update
     void Awake()
     {
-        database.Add("Cube.143 Instance", new Quaternion(0, 40, 0, 0));
+        database.Add("Cube.143 Instance", new Vector3(0,90,0));
         
     }
 
