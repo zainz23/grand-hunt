@@ -85,7 +85,7 @@ public class PropHunt : MonoBehaviour
                     scale.x += 3;
                     scale.z += 3;
 
-                    MESHFILTER.transform.localScale = scale;
+                   MESHFILTER.transform.localScale = scale;
                 }
 
                 // Player wants to become a barrel
