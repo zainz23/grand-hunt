@@ -14,7 +14,14 @@ public class PropValues : MonoBehaviour
     {
         key = GetComponent<MeshFilter>().mesh.name;
         gm = GameObject.FindGameObjectWithTag("GM");
-        rotation = gm.GetComponent<GM>().database[key];
+
+        if (gm.GetComponent<GM>().database.ContainsKey(key)) {
+            rotation = gm.GetComponent<GM>().database[key];
+        } else {
+            rotation = new Vector3(0, 90, 0);
+        }
+
+        
     }
 
     // Update is called once per frame

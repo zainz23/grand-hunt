@@ -16,6 +16,8 @@ public class PropHunt : MonoBehaviour
     public GameObject PROP;   // What you turn into
     public MeshFilter MESHFILTER; // Set this to PROP <MESHFILTER> Component [the mesh we are changing]
 
+    public CapsuleCollider ccollider;
+
     public GameObject currentCOL;
     // Start is called before the first frame update
     void Start()
@@ -24,6 +26,7 @@ public class PropHunt : MonoBehaviour
         Player.SetActive(true);
         PROP.SetActive(false);
         MESHFILTER = PROP.GetComponent<MeshFilter>();
+        ccollider = GetComponent<CapsuleCollider>();
         
     }
 
@@ -37,21 +40,18 @@ public class PropHunt : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftBracket))
         {
-            Debug.Log("DOWN");
             Vector3 scale = MESHFILTER.transform.localScale;
+            float scalee = ccollider.height;
             if (scale.x > 1 && scale.x <= 20) {
                 scale.y -= 1;
                 scale.x -= 1;
                 scale.z -= 1;
                 MESHFILTER.transform.localScale = scale;
             }
-            
-
         }
 
         if (Input.GetKeyDown(KeyCode.RightBracket))
         {
-            Debug.Log("UP");
             Vector3 scale = MESHFILTER.transform.localScale;
             if (scale.x >= 1 && scale.x < 20) {
                 scale.y += 1;

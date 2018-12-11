@@ -6,7 +6,6 @@ public class GM : MonoBehaviour
 {
     //Dictionary<string, PROPClass> database = new Dictionary<string, PROPClass>();
     public Dictionary<string, Vector3> database = new Dictionary<string, Vector3>();
-    //public Dictionary<string, float> database = new Dictionary<string, float>();
 
     // Start is called before the first frame update
     void Awake()
