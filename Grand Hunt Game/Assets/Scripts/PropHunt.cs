@@ -15,10 +15,9 @@ public class PropHunt : MonoBehaviour
     public GameObject Player;   // The player that is being disappeared
     public GameObject PROP;   // What you turn into
     public MeshFilter MESHFILTER; // Set this to PROP <MESHFILTER> Component [the mesh we are changing]
+    public Vector3 resetScale;
 
-    public CapsuleCollider ccollider;
-
-    public GameObject currentCOL;
+    public GameObject currentCollision;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,8 +25,7 @@ public class PropHunt : MonoBehaviour
         Player.SetActive(true);
         PROP.SetActive(false);
         MESHFILTER = PROP.GetComponent<MeshFilter>();
-        ccollider = GetComponent<CapsuleCollider>();
-        
+        resetScale = PROP.transform.localScale;
     }
 
     void Update()
@@ -36,12 +34,12 @@ public class PropHunt : MonoBehaviour
         {
             Player.SetActive(true);
             PROP.SetActive(false);
+            PROP.transform.localScale = resetScale;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftBracket))
         {
             Vector3 scale = MESHFILTER.transform.localScale;
-            float scalee = ccollider.height;
             if (scale.x > 1 && scale.x <= 20) {
                 scale.y -= 1;
                 scale.x -= 1;
@@ -66,7 +64,7 @@ public class PropHunt : MonoBehaviour
     // While player is colliding with object...
     void OnTriggerStay(Collider coll)
     {
-        currentCOL = coll.gameObject;
+        currentCollision = coll.gameObject;
         
         // Tag the object in game
         // Note: Children of Player are left untagged.
@@ -80,12 +78,13 @@ public class PropHunt : MonoBehaviour
                     Vector3 rotation = coll.GetComponent<PropValues>().rotation;
                     MESHFILTER.transform.localEulerAngles = rotation;
 
+                    /*
                     Vector3 scale = coll.transform.localScale;
-                    scale.y += 3;
-                    scale.x += 3;
-                    scale.z += 3;
-
+                    scale.y += 4;
+                    scale.x += 4;
+                    scale.z += 4;
                    MESHFILTER.transform.localScale = scale;
+                   */
                 }
 
                 // Player wants to become a barrel
