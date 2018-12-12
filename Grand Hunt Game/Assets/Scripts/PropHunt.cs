@@ -17,6 +17,8 @@ public class PropHunt : MonoBehaviour
     public MeshFilter MESHFILTER; // Set this to PROP <MESHFILTER> Component [the mesh we are changing]
     public Vector3 resetScale;
 
+    public float originalPROPSIZE;
+
     public GameObject currentCollision;
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,7 @@ public class PropHunt : MonoBehaviour
         PROP.SetActive(false);
         MESHFILTER = PROP.GetComponent<MeshFilter>();
         resetScale = PROP.transform.localScale;
+        originalPROPSIZE = resetScale.z;
     }
 
     void Update()
@@ -78,13 +81,21 @@ public class PropHunt : MonoBehaviour
                     Vector3 rotation = coll.GetComponent<PropValues>().rotation;
                     MESHFILTER.transform.localEulerAngles = rotation;
 
+                    float X, Y, Z;
+                    // TAKES PROPS LOCAL TRANSFORM AND MULTIPLIES WITH PLAYERS LOCAL TRANSFORM
+                    X = coll.transform.localScale.x * originalPROPSIZE;
+                    Y = coll.transform.localScale.y * originalPROPSIZE;
+                    Z = coll.transform.localScale.z * originalPROPSIZE;
+                    MESHFILTER.transform.localScale = new Vector3(X, Y, Z);
+
                     /*
                     Vector3 scale = coll.transform.localScale;
                     scale.y += 4;
                     scale.x += 4;
                     scale.z += 4;
-                   MESHFILTER.transform.localScale = scale;
+                    MESHFILTER.transform.localScale = scale;
                    */
+
                 }
 
                 // Player wants to become a barrel

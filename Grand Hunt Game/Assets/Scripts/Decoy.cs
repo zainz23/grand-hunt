@@ -22,6 +22,8 @@ public class Decoy : MonoBehaviour
             // Sets its local orientation rather than its global orientation.
             PROP.transform.SetParent(PROP.transform.parent, false);
             GameObject decoy = Instantiate(PROP, PROP.transform.position, PROP.transform.rotation);
+            decoy.AddComponent<BoxCollider>();
+            decoy.tag = "PROP";
 
             // Since our character is small, calculate new scale.
             float X, Y, Z;

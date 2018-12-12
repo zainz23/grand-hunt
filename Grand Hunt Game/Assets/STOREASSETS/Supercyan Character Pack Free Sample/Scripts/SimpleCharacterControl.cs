@@ -34,7 +34,10 @@ public class SimpleCharacterControl : MonoBehaviour {
     private bool m_isGrounded;
     private List<Collider> m_collisions = new List<Collider>();
 
-    private Rigidbody rigidbody;
+    private void Start()
+    {
+
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -129,7 +132,6 @@ public class SimpleCharacterControl : MonoBehaviour {
         m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
 
         transform.position += transform.forward * m_currentV * m_moveSpeed * Time.deltaTime;
-
         transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);
 
         m_animator.SetFloat("MoveSpeed", m_currentV);
@@ -162,9 +164,7 @@ public class SimpleCharacterControl : MonoBehaviour {
         if(direction != Vector3.zero)
         {
             m_currentDirection = Vector3.Slerp(m_currentDirection, direction, Time.deltaTime * m_interpolation);
-
             transform.rotation = Quaternion.LookRotation(m_currentDirection);
-
             transform.position += m_currentDirection * m_moveSpeed * Time.deltaTime;
 
             m_animator.SetFloat("MoveSpeed", direction.magnitude);
