@@ -6,7 +6,7 @@ using UnityEngine;
 // Play with values to get desired perspective
 // We can toggle back and forth between top-down view
 // Or we can stick with 3rd person (this script) for cam
-public class ThirdPersonCamera : MonoBehaviour
+public class ThirdPersonCamera_v2 : MonoBehaviour
 {
     private const float Y_ANGLE_MIN = 5.0f;
     private const float Y_ANGLE_MAX = 50.0f;
