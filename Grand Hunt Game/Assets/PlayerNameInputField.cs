@@ -53,6 +53,7 @@ namespace Com.MyCompany.MyGame
         /// Sets the name of the player and saves it in the PlayerPrefs for future sessions.
         /// </summary>
         /// <param name="value">The name of the Player</param>
+        
         public void SetPlayerName(string value)
         {
             // #Important
@@ -60,6 +61,15 @@ namespace Com.MyCompany.MyGame
 
             PlayerPrefs.SetString(playerNamePrefKey, value);
         }
+        /*
+        public void EndEditOnEnter(string value)
+        {
+            if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
+            {
+                PlayerPrefs.SetString(playerNamePrefKey, value);
+            }
+        }
+        */
 
         #endregion
     }
