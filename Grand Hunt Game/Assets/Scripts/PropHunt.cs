@@ -88,13 +88,6 @@ public class PropHunt : MonoBehaviour
                     Z = coll.transform.localScale.z * originalPROPSIZE;
                     MESHFILTER.transform.localScale = new Vector3(X, Y, Z);
 
-                    /*
-                    Vector3 scale = coll.transform.localScale;
-                    scale.y += 4;
-                    scale.x += 4;
-                    scale.z += 4;
-                    MESHFILTER.transform.localScale = scale;
-                   */
 
                 }
 
