@@ -122,7 +122,9 @@ namespace Com.MyCompany.MyGame
                 if (PlayerManager.LocalPlayerInstance == null)
                 {
                     Debug.Log("We are instantiating LocalPlayer from " + Application.loadedLevelName);
+
                     PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+
                 }
                 else
                 {

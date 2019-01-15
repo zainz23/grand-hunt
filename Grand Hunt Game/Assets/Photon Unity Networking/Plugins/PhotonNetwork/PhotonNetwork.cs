@@ -2467,7 +2467,8 @@ public static class PhotonNetwork
     {
         if (!connected || (InstantiateInRoomOnly && !inRoom))
         {
-            Debug.LogError("Failed to Instantiate prefab: " + prefabName + ". Client should be in a room. Current connectionStateDetailed: " + PhotonNetwork.connectionStateDetailed);
+            // Debug.LogError("Failed to Instantiate prefab: " + prefabName + ". Client should be in a room. Current connectionStateDetailed: " + PhotonNetwork.connectionStateDetailed);
+            Debug.Log("Can't create character prefab until connected.");
             return null;
         }
 
