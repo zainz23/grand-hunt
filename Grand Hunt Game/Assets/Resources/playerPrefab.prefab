@@ -1689,6 +1689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 1
   Beams: {fileID: 1965956820}
+  Prop: {fileID: 602532743}
 --- !u!114 &8069454425215844644
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -87,27 +87,10 @@ namespace Com.MyCompany.MyGame
 
         #region MonoBehaviour Callbacks
 
-#if !UNITY_5_4_OR_NEWER
-        /// <summary>See CalledOnLevelWasLoaded. Outdated in Unity 5.4.</summary>
-        void OnLevelWasLoaded(int level)
-        {
-            this.CalledOnLevelWasLoaded(level);
-        }
-#endif
-
-
-        void CalledOnLevelWasLoaded(int level)
-        {
-            // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
-            if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
-            {
-                transform.position = new Vector3(0f, 5f, 0f);
-            }
-        }
-
         /// <summary>
         /// On Unity initialization
         /// </summary>
+
         void Start()
         {
             Instance = this;
@@ -121,26 +104,19 @@ namespace Com.MyCompany.MyGame
                 // It gets synced by using PhotonNetwork.Instantiate
                 if (PlayerManager.LocalPlayerInstance == null)
                 {
-                    Debug.Log("We are instantiating LocalPlayer from " + Application.loadedLevelName);
+                    Scene scene = SceneManager.GetActiveScene();
+                    Debug.Log("We are instantiating LocalPlayer from " + scene.name);
 
                     PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
 
                 }
                 else
                 {
-                    Debug.Log("Ignoring scene load for " + Application.loadedLevelName);
+                    Scene scene = SceneManager.GetActiveScene();
+                    Debug.Log("Ignoring scene load for " + scene.name);
                 }   
             }
-#if UNITY_5_4_OR_NEWER
-            // What this new code does is watching for a level being loaded and raycast downwards the current player's position to see if we hit anything. 
-            // If we don't, this is means we are not above the arena's ground and we need to be repositioned back to the center, 
-            // exactly like when we are entering the room for the first time.
-            // *Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, loadingMode) =>
-                    {
-                        this.CalledOnLevelWasLoaded(scene.buildIndex);
-                    };
-#endif
+
         }
 
         #endregion
