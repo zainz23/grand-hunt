@@ -20,6 +20,10 @@ namespace Com.MyCompany.MyGame
 
         #endregion
 
+        #region Private Variables
+            private GameObject instance;
+        #endregion
+
         #region Photon Messages
 
         /// <summary>

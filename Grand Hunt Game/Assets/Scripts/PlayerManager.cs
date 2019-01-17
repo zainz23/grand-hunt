@@ -22,6 +22,9 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
         public static GameObject LocalPlayerInstance;
 
+        [Tooltip("The Player's UI GameObject Prefab")]
+        public GameObject PlayerUiPrefab;
+
         [Tooltip("The current health (HP) of our player")]
         public float Health = 1f;
 
@@ -42,31 +45,11 @@ namespace Com.MyCompany.MyGame
 
         #region MonoBehaviour CallBacks
 
-        void CalledOnLevelWasLoaded(int level)
-        {
-            // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
-            if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
-            {
-                transform.position = new Vector3(0f, 5f, 0f);
-            }
-        }
         /// <summary>
         /// MonoBehaviour method called on Game Object by Unity during early initializaation phase.
         /// </summary>
         void Awake()
         {
-            // #Important
-            // Used in GameManager.cs: Keep track of the localPlayer instance to prevent instantiation when levels
-            // are synchronized
-            if ( photonView.isMine)
-            {
-                PlayerManager.LocalPlayerInstance = this.gameObject;
-            }
-            // #Critical
-            // we flag as don't destroy on load  so that instance survives level synchronization, thus gives a seamless
-            // experience on levels load.
-            DontDestroyOnLoad(this.gameObject);
-
             if (Beams == null)
             {
                 Debug.LogError("<Color=Red><a>Missing</a></Color> Beams Reference.", this);
@@ -75,6 +58,17 @@ namespace Com.MyCompany.MyGame
             {
                 Beams.SetActive(false);
             }
+            // #Important
+            // Used in GameManager.cs: Keep track of the localPlayer instance to prevent instantiation when levels
+            // are synchronized
+            if (photonView.isMine)
+            {
+                LocalPlayerInstance = this.gameObject;
+            }
+            // #Critical
+            // we flag as don't destroy on load  so that instance survives level synchronization, thus gives a seamless
+            // experience on levels load.
+            DontDestroyOnLoad(this.gameObject);
         }
 
         /// <summary>
@@ -104,19 +98,41 @@ namespace Com.MyCompany.MyGame
 
         void Start()
         {
-            /*
-            #if UNITY_5_4_OR_NEWER
-                // What this new code does is watching for a level being loaded and raycast downwards the current player's position to see if we hit anything. 
-                // If we don't, this is means we are not above the arena's ground and we need to be repositioned back to the center, 
-                // exactly like when we are entering the room for the first time.
-                // *Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
-                UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, loadingMode) =>
+            CameraWork _cameraWork = gameObject.GetComponent<CameraWork>();
+            if (_cameraWork != null)
+            {
+                if (photonView.isMine)
                 {
-                    this.CalledOnLevelWasLoaded(scene.buildIndex);
-                };
+                    _cameraWork.OnStartFollowing();
+                }
+            }
+            else
+            {
+                Debug.LogError("<Color=Red><b>Missing</b></Color> CameraWork Component on player Prefab.", this);
+            }
+            // Create the UI
+            if (this.PlayerUiPrefab != null)
+            {
+                GameObject _uiGo = Instantiate(this.PlayerUiPrefab) as GameObject;
+                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+            }
+            else
+            {
+                Debug.LogWarning("<Color=Red><b>Missing</b></Color> PlayerUiPrefab reference on player prefab.", this);
+            }
+            #if UNITY_5_4_OR_NEWER
+                    // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
+			        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
             #endif
-            */
         }
+        
+        public void OnDisable()
+        {
+        #if UNITY_5_4_OR_NEWER
+			        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        #endif
+        }
+        
 
         /// <summary>
         /// MonoBehaviour method called when the Collider 'other' enters the trigger.
@@ -171,10 +187,35 @@ namespace Com.MyCompany.MyGame
             Health -= 0.1f * Time.deltaTime;
 
         }
+        #if !UNITY_5_4_OR_NEWER
+        /// <summary>See CalledOnLevelWasLoaded. Outdated in Unity 5.4.</summary>
+        void OnLevelWasLoaded(int level)
+        {
+            this.CalledOnLevelWasLoaded(level);
+        }
+        #endif
+
+        /// <summary>
+        /// MonoBehaviour method called after a new level of index 'level' was loaded.
+        /// We recreate the Player UI because it was destroy when we switched level.
+        /// Also reposition the player if outside the current arena.
+        /// </summary>
+        /// <param name="level">Level index loaded</param>
+        void CalledOnLevelWasLoaded(int level)
+        {
+            // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
+            if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
+            {
+                transform.position = new Vector3(0f, 5f, 0f);
+            }
+
+            GameObject _uiGo = Instantiate(this.PlayerUiPrefab) as GameObject;
+            _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+        }
 
         #endregion
 
-        #region Custom
+        #region Private Methods
 
         /// <summary>
         /// Processes the inputs. Maintains a flag representing when the user is pressing Fire.
@@ -197,6 +238,13 @@ namespace Com.MyCompany.MyGame
                 }
             }
         }
+        #if UNITY_5_4_OR_NEWER
+		        void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
+		        {
+			
+			        this.CalledOnLevelWasLoaded(scene.buildIndex);
+		        }
+        #endif
         #endregion
 
         #region IPunObservable implementation

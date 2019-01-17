@@ -30,13 +30,18 @@ namespace Com.MyCompany.MyGame
         /// </summary>
         [Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players and so a new room will be created")]
         public byte MaxPlayersPerRoom = 4;
+
         [Tooltip("The UI Panel to let the user enter name, connect and play ")]
         public GameObject controlPanel;
+
         [Tooltip("The UI Label to inform the user that the connection is being established.")]
         public GameObject progressLabel;
 
+        [Tooltip("The UI Loader Anime")]
+        public LoaderAnime loaderAnime;
+
         #endregion
-        
+
         #region Private Variables
 
         /// <summary>
@@ -64,6 +69,12 @@ namespace Com.MyCompany.MyGame
         /// script is enabled.
         void Awake()
         {
+            if (loaderAnime == null)
+            {
+                Debug.LogError("<Color=Red><b>Missing</b></Color> loaderAnime Reference.", this);
+            }
+
+
             // #Critical
             // We dont join the lobby. There is no need to join a lobby to get the list of rooms
             // Note: Lobby is a virtual container or "list" of rooms.
@@ -101,6 +112,12 @@ namespace Com.MyCompany.MyGame
         /// </summary>
         public void Connect()
         {
+            // start the loader animation for visual effect.
+            if (loaderAnime != null)
+            {
+                loaderAnime.StartLoaderAnimation();
+            }
+
             // Keep track of the will to join a room, since when we come back from the game we will get a callback that we are connected 
             // so we need to know what to do then
             isConnecting = true;

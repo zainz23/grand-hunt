@@ -1670,8 +1670,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb5d21e83f80711419392531d3aba509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 1.4
-  height: 0.1
+  distance: 1.6
+  height: 0.35
   heightSmoothLag: 0
   centerOffset: {x: 0, y: 0.25, z: 0}
   followOnStart: 0
@@ -1687,6 +1687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a9aace1e1dbb747aed5d482138e617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerUiPrefab: {fileID: 170056, guid: 0c2f60a9a7b898841a761682d008d82a, type: 3}
   Health: 1
   Beams: {fileID: 1965956820}
   Prop: {fileID: 602532743}
@@ -1715,8 +1716,8 @@ MonoBehaviour:
   - {fileID: 1431270730061169998}
   - {fileID: 7168988103283102750}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 1
+  instantiationId: 1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &72157144696842989
