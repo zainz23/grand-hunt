@@ -1636,7 +1636,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb4e2bdd7af27a4da617000cf2db9f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 259317965}
   PROP: {fileID: 602532743}
   MESHFILTER: {fileID: 0}
   resetScale: {x: 0, y: 0, z: 0}

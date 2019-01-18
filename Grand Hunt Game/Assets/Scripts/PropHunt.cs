@@ -10,9 +10,14 @@ using UnityEngine;
 //      True if you want it to appear
 
 // TODO: Make this script easy to add more props.
-public class PropHunt : MonoBehaviour
+public class PropHunt : Photon.PunBehaviour
 {
-    public GameObject Player;   // The player that is being disappeared
+    [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
+    public static GameObject Player;
+
+    [Tooltip("While the Player is the local instance. PlayerObj is the 'body' ")]
+    public Transform PlayerObj;
+
     public GameObject PROP;   // What you turn into
     public MeshFilter MESHFILTER; // Set this to PROP <MESHFILTER> Component [the mesh we are changing]
     public Vector3 resetScale;
@@ -20,11 +25,21 @@ public class PropHunt : MonoBehaviour
     public float originalPROPSIZE;
 
     public GameObject currentCollision;
+
+    private void Awake()
+    {
+        if (photonView.isMine)
+        {
+            Player = this.gameObject;
+            PlayerObj = Player.transform.GetChild(1);
+        }
+
+    }
     // Start is called before the first frame update
     void Start()
     {
         // On game start, only the player is visible.
-        Player.SetActive(true);
+        PlayerObj.gameObject.SetActive(true);
         PROP.SetActive(false);
         MESHFILTER = PROP.GetComponent<MeshFilter>();
         resetScale = PROP.transform.localScale;
@@ -33,9 +48,18 @@ public class PropHunt : MonoBehaviour
 
     void Update()
     {
+        if (photonView.isMine)
+        {
+            TransformInputs();
+        }
+
+    }
+
+    void TransformInputs()
+    {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Player.SetActive(true);
+            Player.transform.GetChild(1).gameObject.SetActive(true);
             PROP.SetActive(false);
             PROP.transform.localScale = resetScale;
         }
@@ -43,7 +67,8 @@ public class PropHunt : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftBracket))
         {
             Vector3 scale = MESHFILTER.transform.localScale;
-            if (scale.x > 1 && scale.x <= 20) {
+            if (scale.x > 1 && scale.x <= 20)
+            {
                 scale.y -= 1;
                 scale.x -= 1;
                 scale.z -= 1;
@@ -54,7 +79,8 @@ public class PropHunt : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightBracket))
         {
             Vector3 scale = MESHFILTER.transform.localScale;
-            if (scale.x >= 1 && scale.x < 20) {
+            if (scale.x >= 1 && scale.x < 20)
+            {
                 scale.y += 1;
                 scale.x += 1;
                 scale.z += 1;
@@ -67,6 +93,11 @@ public class PropHunt : MonoBehaviour
     // While player is colliding with object...
     void OnTriggerStay(Collider coll)
     {
+        if (!photonView.isMine)
+        {
+            return;
+        }
+
         currentCollision = coll.gameObject;
         
         // Tag the object in game
@@ -95,7 +126,7 @@ public class PropHunt : MonoBehaviour
                 PROP.SetActive(true);
 
                 // Player no longer exists
-                Player.SetActive(false);
+                PlayerObj.gameObject.SetActive(false);
 
             }
 
