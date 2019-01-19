@@ -43,4 +43,7 @@ MonoBehaviour:
   - RequestForPickupItems
   - RequestForPickupTimes
   - TaggedPlayer
+  - TransformInputs
+  - TransformProp
+  - TriggerDat
   DisableAutoOpenWizard: 1

@@ -1636,6 +1636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb4e2bdd7af27a4da617000cf2db9f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerObj: {fileID: 0}
   PROP: {fileID: 602532743}
   MESHFILTER: {fileID: 0}
   resetScale: {x: 0, y: 0, z: 0}
@@ -1689,7 +1690,6 @@ MonoBehaviour:
   PlayerUiPrefab: {fileID: 170056, guid: 0c2f60a9a7b898841a761682d008d82a, type: 3}
   Health: 1
   Beams: {fileID: 1965956820}
-  Prop: {fileID: 602532743}
 --- !u!114 &8069454425215844644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1714,6 +1714,7 @@ MonoBehaviour:
   - {fileID: 72157144696842989}
   - {fileID: 1431270730061169998}
   - {fileID: 7168988103283102750}
+  - {fileID: 1990531464}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 1
   instantiationId: 1

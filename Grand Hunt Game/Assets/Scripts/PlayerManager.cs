@@ -30,9 +30,10 @@ namespace Com.MyCompany.MyGame
 
         [Tooltip("The Beams GameObject to control")]
         public GameObject Beams;
-
+        /*
         [Tooltip("The Prop GameObject that will change")]
         public GameObject Prop;
+        */
 
         #endregion
 
