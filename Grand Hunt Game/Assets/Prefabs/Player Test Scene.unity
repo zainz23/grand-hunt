@@ -167,6 +167,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8069454425215844644, guid: 0e054041c3381d842b8686b6195d21aa,
+        type: 3}
+      propertyPath: viewIdField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8069454425215844644, guid: 0e054041c3381d842b8686b6195d21aa,
+        type: 3}
+      propertyPath: instantiationId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e054041c3381d842b8686b6195d21aa, type: 3}
 --- !u!1 &1182797774 stripped
@@ -193,6 +203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a9aace1e1dbb747aed5d482138e617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerUiPrefab: {fileID: 0}
+  Health: 1
   Beams: {fileID: 1182797774}
 --- !u!1 &1574687025
 GameObject:
@@ -394,7 +406,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c023665f187d0a147aecf96afd02b9a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

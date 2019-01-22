@@ -1610,8 +1610,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 0.51, y: 1.27, z: 1.03}
+  m_Center: {x: 0, y: 0.5, z: 0.33}
 --- !u!114 &1990531465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1642,7 +1642,9 @@ MonoBehaviour:
   MESHFILTER: {fileID: 0}
   resetScale: {x: 0, y: 0, z: 0}
   originalPROPSIZE: 0
-  currentCollision: {fileID: 0}
+  MyCollider: {fileID: 1990531466}
+  IsPropping: 0
+  IsHumaning: 1
   PropValue: 0
 --- !u!114 &1990531462
 MonoBehaviour:
@@ -1718,8 +1720,8 @@ MonoBehaviour:
   - {fileID: 7168988103283102750}
   - {fileID: 1990531464}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 1
+  instantiationId: 1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &72157144696842989

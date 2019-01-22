@@ -25,8 +25,10 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
     public Vector3 resetScale;
 
     public float originalPROPSIZE;
-    [Tooltip("Current object the player is colliding with")]
-    public GameObject currentCollision;
+
+    [Tooltip("Current object the player is colliding with -- See MyUpdate(), PropHunt.cs")]
+    public BoxCollider MyCollider;
+
 
     #endregion
 
@@ -43,8 +45,6 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
     private int PropValue;
 
     #endregion
-    
-
 
     private void Awake()
     {
@@ -69,10 +69,13 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
     /// </summary>
     void Update()
     {
+        // Check controls if you're the owner
         if (photonView.isMine)
         {
             TransformInputs();
+            UpdateMe();
         }
+        // Otherwise, sync transform
 
         // Trigger Prop active state
         if (PROP != null && IsPropping != PROP.GetActive())
@@ -90,19 +93,27 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
             PROP.transform.localScale = resetScale;
         }
 
-        // PropValue of ID = 0, gives a null from our PropValues table
+        
+        // PropValue of ID == 0, gives a null from our PropValues table
         if (PropValue != 0)
         {
+            // First we get the prop value location by assigning the string correlated to it.
             string result = this.gameObject.GetComponent<PropValues>().values[PropValue];
+            // Load it as a GameObject
             GameObject meshTest = Resources.Load<GameObject>(result);
+            // Make a mesh to be set...
             Mesh m = meshTest.gameObject.GetComponent<MeshFilter>().sharedMesh;
 
+
             // Testing...
+            // Currently, this loop changes the prop for all players temporarily; just to test the serialization methods to use
             var photonViews = UnityEngine.Object.FindObjectsOfType<PhotonView>();
             foreach (var view in photonViews)
             {
+                // Here, check player ID, does it match the id of that who is propping?
+                // Yes? Change for that specific player 
                 var player = view.owner;
-                //Objects in the scene don't have an owner, its means view.owner will be null
+                // Objects in the scene don't have an owner, its means view.owner will be null
                 if (player != null)
                 {
                     var playerPrefabObject = view.gameObject;
@@ -112,6 +123,7 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
                 }
             }
         }
+        
     }
 
     /// <summary>
@@ -123,6 +135,7 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
         {
             PlayerObj = this.transform.GetChild(1);
         }
+
         // On game start, only the player is visible.
         PlayerObj.gameObject.SetActive(true);
         PROP.SetActive(false);
@@ -159,7 +172,8 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
                 MESHFILTER.transform.localScale = scale;
             }
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        // P button only turns them into prop form
+        if (Input.GetKeyDown(KeyCode.P))
         {
             if (!IsPropping)
             {
@@ -176,55 +190,40 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
             }
         }
     }
-
     /// <summary>
-    /// While player is colliding with an object
+    /// While player is colliding with an object...
+    /// Note: This is the enhanced version of OnTriggerStay function
+    /// Reason for change: Spamming E was the only way to transform into props
     /// </summary>
-    /// <param name="coll"></param>
-    void OnTriggerStay(Collider coll)
+    void UpdateMe()
     {
-
-        if (!photonView.isMine)
+        // This allows for faster prop transforming and more control
+        if (Input.GetKeyDown(KeyCode.E) )
         {
-            return;
-        }
-        currentCollision = coll.gameObject;
-
-        // Tag the object in game
-        // Note: Children of Player are left untagged.
-        if (coll.gameObject.tag == "PROP")
-        {
-            if (Input.GetKeyDown(KeyCode.E))
+            Collider[] cols;
+            cols = Physics.OverlapBox(MyCollider.gameObject.transform.position, MyCollider.gameObject.transform.localScale / 2, Quaternion.identity);
+            if (cols.Length > 0)
             {
-                IsPropping = true;
-                IsHumaning = false;
-                MESHFILTER.mesh = coll.GetComponent<MeshFilter>().sharedMesh;
-
-                // Assign an ID to serialize to all other players
-
-                PropValue = SetMeshID(MESHFILTER.mesh);
-
-                Debug.Log("Mesh name: " + MESHFILTER.mesh.name);
-                /* Will use this when serializing rotations and scale
-                if (coll.GetComponent<PropValues>())
+                // Loop through the collisions
+                for (int i = 0; i < cols.Length; i++)
                 {
-                    Vector3 rotation = coll.GetComponent<PropValues>().rotation;
-                    MESHFILTER.transform.localEulerAngles = rotation;
-
-                    float X, Y, Z;
-                    // TAKES PROPS LOCAL TRANSFORM AND MULTIPLIES WITH PLAYERS LOCAL TRANSFORM
-                    X = coll.transform.localScale.x * originalPROPSIZE;
-                    Y = coll.transform.localScale.y * originalPROPSIZE;
-                    Z = coll.transform.localScale.z * originalPROPSIZE;
-                    MESHFILTER.transform.localScale = new Vector3(X, Y, Z);
+                    if (cols[i].tag == "PROP")  // Tag the object in-game
+                    {
+                        IsPropping = true;
+                        IsHumaning = false;
+                        // Player becomes this prop...
+                        MESHFILTER.mesh = cols[i].GetComponent<MeshFilter>().sharedMesh;
+                        // Assign an ID to serialize to all other players
+                        PropValue = SetMeshID(MESHFILTER.mesh);
+                        Debug.Log("Mesh name: " + MESHFILTER.mesh.name);
+                    }
                 }
-                */
             }
         }
-
     }
 
     /* RPC Function, just used as testing...
+     * will update this function when needed
      * Called w/ PhotonView.Get(this).RPC("TriggerDat", PhotonTargets.All, SendViewID);
     [PunRPC]
     void TriggerDat(int viewID, PhotonMessageInfo info)
