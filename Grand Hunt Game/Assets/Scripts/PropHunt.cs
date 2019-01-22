@@ -43,6 +43,9 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
     // This variable is just an ID for the prop
     [SerializeField]
     private int PropValue;
+    // ID of player who is transforming
+    [SerializeField]
+    private int PlayerTransformID = -1; 
 
     #endregion
 
@@ -95,7 +98,7 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
 
         
         // PropValue of ID == 0, gives a null from our PropValues table
-        if (PropValue != 0)
+        if (PropValue != 0 && PlayerTransformID != -1)
         {
             // First we get the prop value location by assigning the string correlated to it.
             string result = this.gameObject.GetComponent<PropValues>().values[PropValue];
@@ -104,22 +107,26 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
             // Make a mesh to be set...
             Mesh m = meshTest.gameObject.GetComponent<MeshFilter>().sharedMesh;
 
-
-            // Testing...
-            // Currently, this loop changes the prop for all players temporarily; just to test the serialization methods to use
+            // All objects that have PV will be gathered
             var photonViews = UnityEngine.Object.FindObjectsOfType<PhotonView>();
+            // Check each and update the corresponding player that transformed
             foreach (var view in photonViews)
             {
-                // Here, check player ID, does it match the id of that who is propping?
-                // Yes? Change for that specific player 
                 var player = view.owner;
                 // Objects in the scene don't have an owner, its means view.owner will be null
                 if (player != null)
                 {
                     var playerPrefabObject = view.gameObject;
-                    var p = playerPrefabObject.gameObject.transform.GetChild(2).gameObject;
-                    MeshFilter mf = p.GetComponent<MeshFilter>();
-                    mf.mesh = m;
+                    // Here, check player ID, does it match the id of that who is propping?
+                    // Yes? Change for that specific player 
+                    if ( playerPrefabObject.gameObject.GetComponent<PhotonView>().ownerId == PlayerTransformID) // compare their IDs with received one
+                    {
+                        // GetChild(2) = PROP
+                        var p = playerPrefabObject.gameObject.transform.GetChild(2).gameObject;
+                        MeshFilter mf = p.GetComponent<MeshFilter>();
+                        mf.mesh = m;    // Sets the mesh/appearance of the prop
+                    }
+
                 }
             }
         }
@@ -215,7 +222,10 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
                         MESHFILTER.mesh = cols[i].GetComponent<MeshFilter>().sharedMesh;
                         // Assign an ID to serialize to all other players
                         PropValue = SetMeshID(MESHFILTER.mesh);
-                        Debug.Log("Mesh name: " + MESHFILTER.mesh.name);
+                        // Serialize the ID of this player
+                        PlayerTransformID = this.gameObject.GetComponent<PhotonView>().ownerId;
+
+                        // Debug.Log("Mesh name: " + MESHFILTER.mesh.name);
                     }
                 }
             }
@@ -284,6 +294,7 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
             stream.SendNext(IsPropping);
             stream.SendNext(IsHumaning);
             stream.SendNext(PropValue); // Sends the prop ID
+            stream.SendNext(PlayerTransformID); // Sends the ID of the player who is transforming
         }
         else
         {
@@ -291,6 +302,7 @@ public class PropHunt : Photon.PunBehaviour, IPunObservable
             this.IsPropping = (bool)stream.ReceiveNext();
             this.IsHumaning = (bool)stream.ReceiveNext();
             this.PropValue = (int)stream.ReceiveNext();
+            this.PlayerTransformID = (int)stream.ReceiveNext();
         }
     }
 

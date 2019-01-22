@@ -1646,6 +1646,7 @@ MonoBehaviour:
   IsPropping: 0
   IsHumaning: 1
   PropValue: 0
+  PlayerTransformID: -1
 --- !u!114 &1990531462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1720,8 +1721,8 @@ MonoBehaviour:
   - {fileID: 7168988103283102750}
   - {fileID: 1990531464}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 1
-  instantiationId: 1
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &72157144696842989
