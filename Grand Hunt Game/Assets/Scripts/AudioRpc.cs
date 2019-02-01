@@ -19,6 +19,20 @@ public class AudioRpc : Photon.MonoBehaviour
         p_Source = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        if (photonView.isMine)
+        {
+            // On Press Key 'O'
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                PhotonView photonView = PhotonView.Get(this);
+                photonView.RPC("Ping", PhotonTargets.All);
+            }
+        }
+
+    }
+
     [PunRPC]
     void Ping()
     {
