@@ -82,7 +82,7 @@ namespace Com.MyCompany.MyGame
             {
                 ProcessInputs();
                 
-                // Need to also see when other isntance fires
+                // Need to also see when other instance fires
             }
             
             // Trigger Beams active state
